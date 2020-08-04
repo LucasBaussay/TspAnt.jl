@@ -71,7 +71,7 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	city::City = ant.way[length(ant.way)]
 	# dictProba::Dict{City, Float64} = Dict{City, Float64}()
 
-	ways::Dict{City, Way} = map.ways[city.index]
+	ways::Dict{CityIndex, Way} = map.ways[city.index]
 	total::Float64 = calcTotal(city, ant.notWay, map, α, β)
 
 	# maxProba::Float64 = 0.
