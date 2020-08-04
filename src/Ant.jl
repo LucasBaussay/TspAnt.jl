@@ -49,7 +49,7 @@ function calcTotal(city::City, nextCities::Vector{City}, map::Map, α::Real, β:
 	total::Float64 = 0.
 
 	for nextCity in nextCities
-		way = map.ways[city][nextCity]
+		way = map.ways[city.index][nextCity.index]
 
 		total += way.pheromone^α * way.length^(-β)
 	end
@@ -71,7 +71,7 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	city::City = ant.way[length(ant.way)]
 	# dictProba::Dict{City, Float64} = Dict{City, Float64}()
 
-	ways::Dict{City, Way} = map.ways[city]
+	ways::Dict{City, Way} = map.ways[city.index]
 	total::Float64 = calcTotal(city, ant.notWay, map, α, β)
 
 	# maxProba::Float64 = 0.
@@ -90,7 +90,7 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 
 	for potentialCity in ant.notWay
 
-		way = map.ways[city][potentialCity]
+		way = map.ways[city.index][potentialCity.index]
 		proba = calcProba(ant, way, total, α, β)
 
 		push!(listProba, proba)
@@ -105,7 +105,7 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	end
 	nextCity = ant.notWay[indCity]
 
-	nextWay = map.ways[city][nextCity]
+	nextWay = map.ways[city.index][nextCity.index]
 
 	return nextCity, nextWay
 
@@ -124,7 +124,7 @@ function round!(ant::Ant, map::Map, α::Real, β::Real)
 	firstCity = ant.way[1]
 	lastCity = ant.way[length(ant.way)]
 
-	way = map.ways[firstCity][lastCity]
+	way = map.ways[firstCity.index][lastCity.index]
 
 	addCity!(ant, firstCity, way)
 	return ant
@@ -137,7 +137,7 @@ function wayBack!(map::Map, ant::Ant, Q::Real)
 		city = ant.way[idTown]
 		nextCity = ant.way[idTown+1]
 
-		way = map.ways[city][nextCity]
+		way = map.ways[city.index][nextCity.index]
 
 		way.pheromone += Q/ant.lengthMade
 	end

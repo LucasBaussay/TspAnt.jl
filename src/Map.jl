@@ -1,11 +1,23 @@
 import Random
 
+abstract type MapModification end
+
+struct AddCity <: MapModification
+    city::City
+end
+
+struct DeleteCity <: MapModification
+    city::City
+end
+
 mutable struct Map
 
     cities::Vector{City}
 
     transitions::Dict{City, Union{Vector{CityIndex}, Nothing}}
-    ways::Dict{City, Dict{City, Way}}
+    ways::Dict{CityIndex, Dict{CityIndex, Way}}
+
+    listModification::Vector{MapModification}
 
     solution::Solution
 
@@ -14,7 +26,7 @@ end
 struct RandomCreation end
 
 function Map()
-    return Map(Vector{City}(), Dict{City, Vector{CityIndex}}(), Dict{City, Dict{City, Way}}(), Solution())
+    return Map(Vector{City}(), Dict{City, Vector{CityIndex}}(), Dict{CityIndex, Dict{CityIndex, Way}}(), Vector{MapModification}(),  Solution())
 end
 
 #Is it better for Space complexity ? Time Complexity ? to not recrate space memory every time
@@ -47,6 +59,8 @@ function city!(map::Map, x::Float64, y::Float64, transition::Union{Vector{Int64}
     push!(map.cities, city)
     push!(map.transitions, city => transition)
 
+    push!(map.listModification, AddCity(city))
+
     return city
 end
 
@@ -72,15 +86,16 @@ function updatePhero!(map::Map, p::Float64)
 end
 
 function createWays!(map::Map, pheroInit::Float64)
-    for city in map.cities
+    for change in map.listModification
+        city = change.city
         nextCitiesIndex = map.transitions[city]
         if nextCitiesIndex != nothing
-            push!(map.ways, city => Dict(map.cities[cityIndex.value] => Way(distance(city, map.cities[cityIndex.value]), pheroInit) for cityIndex in (map(nextCityIndex-> nextCityIndex != city.index, nextCitiesIndex))))
+            push!(map.ways, city.index => Dict(cityIndex => Way(distance(city, map.cities[cityIndex.value]), pheroInit) for cityIndex in (map(nextCityIndex-> nextCityIndex != city.index, nextCitiesIndex))))
         else
             listCities = map.cities[:]
             deleteat!(listCities, city.index.value)
-            ways = Dict(nextCity => Way(distance(city, nextCity), pheroInit) for nextCity in listCities)
-            push!(map.ways, city => ways)
+            ways = Dict(nextCity.index => Way(distance(city, nextCity), pheroInit) for nextCity in listCities)
+            push!(map.ways, city.index => ways)
         end
     end
     # return map
