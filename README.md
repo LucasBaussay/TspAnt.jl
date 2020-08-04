@@ -21,6 +21,6 @@ Now you can create your Random map and optimize it :
 
 ```
 julia> m = VrpAnt.Map(nbrVille::Int64)
-julia> Vrp.optilize!(m)
+julia> Vrp.optimize!(m)
 julia> Vrp.display(m)
 ```
