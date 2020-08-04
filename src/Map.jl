@@ -66,7 +66,7 @@ end
 
 #TODO : Find how tu use the macro correctly
 
-function Map(nbrVille::Int64, ::RandomCreation, borneX::Int64 = 50, borneY::Int64 = 50)
+function Map(nbrVille::Int64, borneX::Int64 = 50, borneY::Int64 = 50)
     m = Map()
     for ind = 1:nbrVille
         cityX = borneX*rand()
