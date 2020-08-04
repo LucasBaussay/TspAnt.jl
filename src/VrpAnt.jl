@@ -83,6 +83,6 @@ function updateSolution!(map::Map, antList::Vector{Ant})
     end
 end
 
-export optimize!
+export optimize!, Map, display
 
 end  # module
