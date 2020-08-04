@@ -5,9 +5,9 @@
 [![Coverage](https://codecov.io/gh/LucasBaussay/VrpAnt.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/LucasBaussay/VrpAnt.jl)
 [![Coverage](https://coveralls.io/repos/github/LucasBaussay/VrpAnt.jl/badge.svg?branch=master)](https://coveralls.io/github/LucasBaussay/VrpAnt.jl?branch=master)
 
-Hey Jules !
+### Hey Jules !
 
-So I've many problem above 11 cities I don't why. I'll work on it but it should be ok just to test it now.
+So I've many problems above 11 cities I don't know why. I'll work on it but it should be ok just to test it now.
 
 You need first to add the package by taping in a julia console
 
