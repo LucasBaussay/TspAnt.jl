@@ -74,8 +74,7 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	ways::Dict{CityIndex, Way} = map.ways[city.index]
 	total::Float64 = calcTotal(city, ant.notWay, map, α, β)
 
-	# maxProba::Float64 = 0.
-	# nextCity = ant.notWay[1]
+
 
 	listProba = Vector{Float64}()
 	sumProba = 0.
@@ -97,15 +96,26 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	end
 
 	rand = Random.rand()*sum(listProba)
-	# print(sum(listProba), "\n")
+	print(sum(listProba), "\n")
 
-	while rand > sumProba && indCity < length(ant.notWay)
-		sumProba += listProba[indCity]
-		indCity += 1
-	end
-	nextCity = ant.notWay[indCity]
-
+	maxProba::Float64 = listProba[1]
+	nextCity = ant.notWay[1]
 	nextWay = map.ways[city.index][nextCity.index]
+
+	# while rand > sumProba && indCity < length(ant.notWay)
+	# 	sumProba += listProba[indCity]
+	# 	indCity += 1
+	# end
+	for ind = 2:length(listProba)
+		if listProba[ind]>maxProba
+			nextCity = ant.notWay[ind]
+			nextWay = nextWay = map.ways[city.index][nextCity.index]
+		end
+	end
+
+	# nextCity = ant.notWay[indCity]
+	# nextWay = map.ways[city.index][nextCity.index]
+
 
 	return nextCity, nextWay
 
