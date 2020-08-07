@@ -96,7 +96,6 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	end
 
 	rand = Random.rand()*sum(listProba)
-	print(sum(listProba), "\n")
 
 	maxProba::Float64 = listProba[1]
 	nextCity = ant.notWay[1]
@@ -109,7 +108,8 @@ function chooseCity(map::Map, ant::Ant, α::Real, β::Real)
 	for ind = 2:length(listProba)
 		if listProba[ind]>maxProba
 			nextCity = ant.notWay[ind]
-			nextWay = nextWay = map.ways[city.index][nextCity.index]
+			nextWay = map.ways[city.index][nextCity.index]
+			maxProba = listProba[ind]
 		end
 	end
 
@@ -134,7 +134,7 @@ function round!(ant::Ant, map::Map, α::Real, β::Real)
 	firstCity = ant.way[1]
 	lastCity = ant.way[length(ant.way)]
 
-	way = map.ways[firstCity.index][lastCity.index]
+	way = map.ways[lastCity.index][firstCity.index]
 
 	addCity!(ant, firstCity, way)
 	return ant
