@@ -72,7 +72,7 @@ function _optimize!(map::Map, m::Int64, p::Float64, α::Real, β::Real, Q::Real,
         end
 
         ind+=1
-        updateSolution!(map, stillSame, antList)
+        stillSame = updateSolution!(map, stillSame, antList)
     end
 
     return map
@@ -85,9 +85,9 @@ function updateSolution!(map::Map, stillSame::Int64, antList::Vector{Ant})
     if bestAnt.lengthMade < map.solution.length
         map.solution.path = bestAnt.way
         map.solution.length = bestAnt.lengthMade
-        stillSame = 0
+        return 0
     else
-        stillSame+=1
+        return stillSame+1
     end
 end
 
