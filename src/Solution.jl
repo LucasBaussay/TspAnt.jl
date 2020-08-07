@@ -6,6 +6,8 @@ struct NCEnding <: SolutionState end
 
 struct InProgress <: SolutionState end
 
+struct NoChangeEnding <: SolutionState end
+
 mutable struct Solution
 
     path::Vector{City}
