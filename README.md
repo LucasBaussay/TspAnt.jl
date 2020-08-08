@@ -13,14 +13,14 @@ You need first to add the package by taping in a julia console
 
 ```
 julia> ]
-pkg> add https://github.com/LucasBaussay/VrpAnt
+pkg> add https://github.com/LucasBaussay/VrpAnt.jl
 julia> using VrpAnt
 ```
 
-Now you can create your Random map and optimize it :
+Now you can create your Random map with 25 cities and optimize it :
 
 ```
-julia> m = VrpAnt.Map(nbrVille::Int64)
+julia> m = VrpAnt.Map(25)
 julia> Vrp.optimize!(m)
 julia> Vrp.display(m)
 ```
