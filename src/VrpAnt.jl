@@ -46,7 +46,20 @@ function stopCondition!(map::Map, antList::Vector{Ant}, ind::Int64, stillSame::I
 end
 
 
-function optimize!(map::Map, m::Union{Nothing, Int64} = nothing, p::Float64 = 0.5, α::Real = 3, β::Real = 1, Q::Real = 100, NCmax::Int64 = 5000, stillSameMax::Int64 = 50, pheroInit::Float64 = 1.)
+function updateSolution!(map::Map, stillSame::Int64, antList::Vector{Ant})
+    bestAnt::Ant = searchBestAnt(antList)
+
+    if bestAnt.lengthMade < map.solution.length
+        map.solution.path = bestAnt.way
+        map.solution.length = bestAnt.lengthMade
+        return 0
+    else
+        return stillSame+1
+    end
+end
+
+
+function optimize!(map::Map; m::Union{Nothing, Int64} = nothing, p::Float64 = 0.5, α::Real = 3, β::Real = 1, Q::Real = 100, NCmax::Int64 = 5000, stillSameMax::Int64 = 50, pheroInit::Float64 = 1.)
     createWays!(map, pheroInit)
     m == nothing ? _optimize!(map, length(map.cities), p, α, β, Q, NCmax, stillSameMax) : _optimize!(map, m, p, α, β, Q, NCmax, stillSameMax)
     return map
@@ -62,7 +75,9 @@ function _optimize!(map::Map, m::Int64, p::Float64, α::Real, β::Real, Q::Real,
     while !stopCondition!(map, antList, ind, NCmax, stillSame, stillSameMax)
 
         if ind != 0
-            for ant in antList
+            sort!(antList, by = ant -> ant.lengthMade)
+
+            for ant in antList[1:Int(ceil(0.1*m))]
                 wayBack!(map, ant, Q)
             end
         end
@@ -76,19 +91,6 @@ function _optimize!(map::Map, m::Int64, p::Float64, α::Real, β::Real, Q::Real,
     end
 
     return map
-end
-
-
-function updateSolution!(map::Map, stillSame::Int64, antList::Vector{Ant})
-    bestAnt::Ant = searchBestAnt(antList)
-
-    if bestAnt.lengthMade < map.solution.length
-        map.solution.path = bestAnt.way
-        map.solution.length = bestAnt.lengthMade
-        return 0
-    else
-        return stillSame+1
-    end
 end
 
 export optimize!, Map, display

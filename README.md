@@ -7,8 +7,6 @@
 
 ### Hey Jules !
 
-So I've many problems above 11 cities I don't know why. I'll work on it but it should be ok just to test it now.
-
 You need first to add the package by taping in a julia console
 
 ```
