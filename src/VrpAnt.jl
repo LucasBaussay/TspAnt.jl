@@ -6,8 +6,9 @@ include("City.jl")
 include("Way.jl")
 include("Solution.jl")
 include("Map.jl")
-include("Ant.jl")
 include("Model.jl")
+include("Ant.jl")
+
 
 include("GraphicDisplay.jl")
 
