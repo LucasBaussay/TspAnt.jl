@@ -71,14 +71,6 @@ function Map(nbrVille::Int64, borneX::Int64 = 50, borneY::Int64 = 50)
     return m
 end
 
-function updatePhero!(model::Model, p::Float64)
-    for dictWays in collect(values(model.ways))
-        for way in collect(values(dictWays))
-            way.pheromone *= p
-        end
-    end
-    return map
-end
 
 function createWays(map::Map, pheroInit::Float64)
     listWays::Dict{CityIndex, Dict{CityIndex, Way}} = Dict{CityIndex, Dict{CityIndex, Way}}()

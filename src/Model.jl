@@ -19,3 +19,12 @@ function Model(nbVille::Int64, borneX::Real = 50, borneY::Real = 50)
     map = Map(nbVille, borneX, borneY)
     return Model(map)
 end
+
+function updatePhero!(model::Model, p::Float64)
+    for dictWays in collect(values(model.ways))
+        for way in collect(values(dictWays))
+            way.pheromone *= p
+        end
+    end
+    return map
+end
