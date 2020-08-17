@@ -62,7 +62,7 @@ end
 
 
 function optimize(map::Map; m::Union{Nothing, Int64} = nothing, p::Float64 = 0.5, α::Real = 3, β::Real = 1, Q::Real = 100, NCmax::Int64 = 5000, stillSameMax::Int64 = 50, pheroInit::Float64 = 1.)
-    model = Model(map, pheroInit)
+    model::Model = Model(map, pheroInit)
     m == nothing ? _optimize!(model, length(map.cities), p, α, β, Q, NCmax, stillSameMax) : _optimize!(model, m, p, α, β, Q, NCmax, stillSameMax)
     return model
 end

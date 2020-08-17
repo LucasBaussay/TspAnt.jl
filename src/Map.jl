@@ -74,10 +74,10 @@ end
 
 function createWays(map::Map, pheroInit::Float64)
     listWays::Dict{CityIndex, Dict{CityIndex, Way}} = Dict{CityIndex, Dict{CityIndex, Way}}()
-    for city in model.map.cities
+    for city in .map.cities
         nextCitiesIndex = map.transitions[city]
         if nextCitiesIndex != nothing
-            push!(model.ways, city.index => Dict(cityIndex => Way(distance(city, map.cities[cityIndex.value]), pheroInit) for cityIndex in (map(nextCityIndex-> nextCityIndex != city.index, nextCitiesIndex))))
+            push!(listWays, city.index => Dict(cityIndex => Way(distance(city, map.cities[cityIndex.value]), pheroInit) for cityIndex in (map(nextCityIndex-> nextCityIndex != city.index, nextCitiesIndex))))
         else
             listCities = model.map.cities[:]
             deleteat!(listCities, city.index.value)
