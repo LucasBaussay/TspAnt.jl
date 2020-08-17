@@ -18,7 +18,8 @@ julia> using VrpAnt
 Now you can create your Random map with 25 cities and optimize it :
 
 ```
-julia> m = VrpAnt.Map(25)
-julia> Vrp.optimize!(m)
-julia> Vrp.display(m)
+julia> map = VrpAnt.Map(25)
+julia> model = VrpAnt.Model(map)
+julia> Vrp.optimize!(model)
+julia> Vrp.display(model)
 ```
