@@ -1,32 +1,27 @@
 import Random
 
-abstract type MapModification end
-
-struct AddCity <: MapModification
-    city::City
-end
-
-struct DeleteCity <: MapModification
-    city::City
-end
+# abstract type MapModification end
+#
+# struct AddCity <: MapModification
+#     city::City
+# end
+#
+# struct DeleteCity <: MapModification
+#     city::City
+# end
 
 mutable struct Map
 
     cities::Vector{City}
 
     transitions::Dict{City, Union{Vector{CityIndex}, Nothing}}
-    ways::Dict{CityIndex, Dict{CityIndex, Way}}
-
-    listModification::Vector{MapModification}
-
-    solution::Solution
 
 end
 
 struct RandomCreation end
 
 function Map()
-    return Map(Vector{City}(), Dict{City, Vector{CityIndex}}(), Dict{CityIndex, Dict{CityIndex, Way}}(), Vector{MapModification}(),  Solution())
+    return Map(Vector{City}(), Dict{City, Union{Vector{CityIndex}, Nothing}}())
 end
 
 #Is it better for Space complexity ? Time Complexity ? to not recrate space memory every time
@@ -59,7 +54,7 @@ function city!(map::Map, x::Float64, y::Float64, transition::Union{Vector{Int64}
     push!(map.cities, city)
     push!(map.transitions, city => transition)
 
-    push!(map.listModification, AddCity(city))
+    # push!(map.listModification, AddCity(city))
 
     return city
 end
@@ -76,8 +71,8 @@ function Map(nbrVille::Int64, borneX::Int64 = 50, borneY::Int64 = 50)
     return m
 end
 
-function updatePhero!(map::Map, p::Float64)
-    for dictWays in collect(values(map.ways))
+function updatePhero!(model::Model, p::Float64)
+    for dictWays in collect(values(model.ways))
         for way in collect(values(dictWays))
             way.pheromone *= p
         end
@@ -85,18 +80,18 @@ function updatePhero!(map::Map, p::Float64)
     return map
 end
 
-function createWays!(map::Map, pheroInit::Float64)
-    for change in map.listModification
-        city = change.city
+function createWays(map::Map, pheroInit::Float64)
+    listWays::Dict{CityIndex, Dict{CityIndex, Way}} = Dict{CityIndex, Dict{CityIndex, Way}}()
+    for city in model.map.cities
         nextCitiesIndex = map.transitions[city]
         if nextCitiesIndex != nothing
-            push!(map.ways, city.index => Dict(cityIndex => Way(distance(city, map.cities[cityIndex.value]), pheroInit) for cityIndex in (map(nextCityIndex-> nextCityIndex != city.index, nextCitiesIndex))))
+            push!(model.ways, city.index => Dict(cityIndex => Way(distance(city, map.cities[cityIndex.value]), pheroInit) for cityIndex in (map(nextCityIndex-> nextCityIndex != city.index, nextCitiesIndex))))
         else
-            listCities = map.cities[:]
+            listCities = model.map.cities[:]
             deleteat!(listCities, city.index.value)
             ways = Dict(nextCity.index => Way(distance(city, nextCity), pheroInit) for nextCity in listCities)
-            push!(map.ways, city.index => ways)
+            push!(listWays, city.index => ways)
         end
     end
-    # return map
+    return listWays
 end
